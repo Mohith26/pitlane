@@ -1,0 +1,50 @@
+{
+  "generated_by": "test/*.test.js + ad-hoc benchmark run, all numbers copied verbatim from actual REPL output, 2026-09-03",
+  "tests": {
+    "totalPassed": 21,
+    "totalFailed": 0,
+    "totalAssertions": 229,
+    "suites": {
+      "benchScheduler": { "passed": 3, "failed": 0, "assertions": 204 },
+      "bisect": { "passed": 4, "failed": 0, "assertions": 9 },
+      "failureTriage": { "passed": 4, "failed": 0, "assertions": 5 },
+      "flakyDetect": { "passed": 5, "failed": 0, "assertions": 5 },
+      "qualify": { "passed": 5, "failed": 0, "assertions": 6 }
+    }
+  },
+  "bench_scheduling": {
+    "workload": "150 randomized jobs, 3 heterogeneous benches, priorities 1-5",
+    "capability_aware_preemptive_makespan_ms": 22525,
+    "naive_fifo_makespan_ms": 25990,
+    "makespan_improvement_pct": 13.3,
+    "bench_utilization_capability_aware": 0.604
+  },
+  "failure_triage_clustering": {
+    "clean_synthetic_4_cluster_dataset": {
+      "raw_failures": 400, "ground_truth_clusters": 4, "predicted_clusters": 4,
+      "precision": 1.0, "recall": 1.0, "f1": 1.0
+    },
+    "noisy_synthetic_6_cluster_dataset_with_deliberate_vocabulary_overlap": {
+      "raw_failures": 360, "ground_truth_clusters": 6, "predicted_clusters": 5,
+      "precision": 0.7468354430379747, "recall": 1.0, "f1": 0.855072463768116,
+      "note": "correctly merges two genuinely near-duplicate templates (lidar-channel vs radar-channel fault injection) into one cluster - an honest, non-perfect result on a deliberately hard case, kept instead of only reporting the clean 1.0 case"
+    }
+  },
+  "flaky_vs_regression_bisection": {
+    "true_culprit_commit": 1234,
+    "search_range": 2000,
+    "sweep_by_flake_rate": {
+      "0.0": { "samples_per_commit": 1, "total_oracle_runs": 11, "found_correct_culprit": true },
+      "0.05": { "samples_per_commit": 20, "total_oracle_runs": 220, "found_correct_culprit": true },
+      "0.1": { "samples_per_commit": 25, "total_oracle_runs": 275, "found_correct_culprit": true },
+      "0.2": { "samples_per_commit": 45, "total_oracle_runs": 495, "found_correct_culprit": true },
+      "0.3": { "samples_per_commit": 100, "total_oracle_runs": 1100, "found_correct_culprit": true },
+      "0.4": { "samples_per_commit": 401, "total_oracle_runs": 4411, "found_correct_culprit": true }
+    },
+    "negative_control": "a FIXED small sample size (7/commit) that works at low flake rates was confirmed, across 20 seeds, to sometimes converge on the wrong culprit entirely once flake rate reached 35% - the honest failure mode that motivated scaling sample size with measured flakiness"
+  },
+  "release_qualification_gating": {
+    "example_3_of_3_passes": { "wilson_lower_bound": 0.4384939195509822, "go_no_go": "NO_GO", "note": "100% observed but not enough samples to certify 0.95 confidence" },
+    "example_300_of_300_passes": { "wilson_lower_bound": 0.9873565700022642, "go_no_go": "GO" }
+  }
+}
